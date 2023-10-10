@@ -3,6 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -29,8 +30,9 @@ vector<vector<int>> genRandMatrix(int intsize, int intmaxValue)
     return matrix;
 };
 
-void diag(vector<vector<int>> matrix, vector<int>arr, int size)
+void diag(vector<vector<int>> matrix, vector<int> &arr)
 {
+    int size = matrix.size();
     int n = size - 1;
     int i, j, count = 0;
     while (n >= 0)
@@ -39,7 +41,7 @@ void diag(vector<vector<int>> matrix, vector<int>arr, int size)
         j = n--;
         while (j < size)
         {
-            arr[count] = matrix[i][j];
+            arr.push_back(matrix[i][j]);
             count++;
             i++;
             j++;
@@ -52,16 +54,17 @@ void diag(vector<vector<int>> matrix, vector<int>arr, int size)
         j = 0;
         while (i < size)
         {
-            arr[count] = matrix[i][j];
+            arr.push_back(matrix[i][j]);
             count++;
             i++;
             j++;
         }
     }
+
 }
 
-void diagReverse(vector<vector<int>> matrix, vector<int> arr, int size)
-{
+void diagReverse(vector<vector<int>> matrix, vector<int> &arr)
+{   int size = matrix.size();
     int n = 0;
     int i, j, count = 0;
     while (n < size)
@@ -70,7 +73,7 @@ void diagReverse(vector<vector<int>> matrix, vector<int> arr, int size)
         i = n++;
         while (i >= 0)
         {
-            arr[count] = matrix[i][j];
+            arr.push_back(matrix[i][j]);
             count++;
             j++;
             i--;
@@ -83,7 +86,7 @@ void diagReverse(vector<vector<int>> matrix, vector<int> arr, int size)
         j = n++;
         while (j < size)
         {
-            arr[count] = matrix[i][j];
+            arr.push_back(matrix[i][j]);
             count++;
             i--;
             j++;
@@ -91,14 +94,15 @@ void diagReverse(vector<vector<int>> matrix, vector<int> arr, int size)
     }
 }
 
-void spiral(vector<vector<int>> matrix, vector<int> arr, int n)
+void spiral(vector<vector<int>> matrix, vector<int> &arr)
 {
+    int n = matrix.size();
     int shift, count, i, j;
     shift = count = i = j = 0;
 
     while (count < n * n)
     {
-        arr[n * n - count - 1] = matrix[i][j];
+        arr.push_back(matrix[i][j]);
         if (i == shift && j < n - shift - 1)
             j++;
         else if (j == n - shift - 1 && i < n - shift - 1)
@@ -117,14 +121,15 @@ void spiral(vector<vector<int>> matrix, vector<int> arr, int n)
     }
 }
 
-void spiralReverse(vector<vector<int>> matrix, vector<int> arr, int n)
+void spiralReverse(vector<vector<int>> matrix, vector<int> &arr)
 {
+    int n = matrix.size();
     int shift, count, i, j;
     shift = count = i = j = 0;
 
     while (count < n * n)
     {
-        arr[count] = matrix[i][j];
+        arr.push_back(matrix[i][j]);
         if (i == shift && j < n - shift - 1)
             j++;
         else if (j == n - shift - 1 && i < n - shift - 1)
@@ -141,6 +146,8 @@ void spiralReverse(vector<vector<int>> matrix, vector<int> arr, int n)
 
         count++;
     }
+
+    reverse(arr.begin(), arr.end());
 
 }
 
@@ -155,6 +162,13 @@ void printMatrix(vector<vector<int>> vect) {
 }
 
 
+void printOut(vector<int> out){
+    for (int el : out) {
+        cout << el << " ";
+    }
+    cout << '\n';
+}
+
 int main()
 {
     srand(time(NULL));
@@ -164,7 +178,21 @@ int main()
     vector<int> out;
 
     printMatrix(matrix);
+    diag(matrix, out);
+    printOut(out);
 
+    out.clear();
+    out.shrink_to_fit();
+    diagReverse(matrix, out);
+    printOut(out);
 
-    
+    out.clear();
+    out.shrink_to_fit();
+    spiral(matrix, out);
+    printOut(out);
+
+    out.clear();
+    out.shrink_to_fit();
+    spiralReverse(matrix, out);
+    printOut(out);
 }
