@@ -29,109 +29,129 @@ vector<vector<int>> genRandMatrix(int intsize, int intmaxValue)
     return matrix;
 };
 
-void printMatrix(vector<vector<int>> matrix)
+void diag(vector<vector<int>> matrix, vector<int>arr, int size)
 {
-    int mSize = matrix.size();
-    for (int i = 0; i < mSize; i++)
+    int n = size - 1;
+    int i, j, count = 0;
+    while (n >= 0)
     {
-        int lSize = matrix[i].size();
-        for (int j = 0; j < lSize; j++)
+        i = 0;
+        j = n--;
+        while (j < size)
         {
-            cout << matrix[i][j] << ' ';
+            arr[count] = matrix[i][j];
+            count++;
+            i++;
+            j++;
         }
-        cout << endl;
+    }
+    n = 1;
+    while (n < size)
+    {
+        i = n++;
+        j = 0;
+        while (i < size)
+        {
+            arr[count] = matrix[i][j];
+            count++;
+            i++;
+            j++;
+        }
     }
 }
 
-void printMatrixDiag(vector<vector<int>> matrix)
+void diagReverse(vector<vector<int>> matrix, vector<int> arr, int size)
 {
-    int mSize = matrix.size();
-    int currentDiag = 0;
-
-    for (; currentDiag < mSize; currentDiag++)
+    int n = 0;
+    int i, j, count = 0;
+    while (n < size)
     {
-        for (int i = 0; i < currentDiag + 1; i++)
+        j = 0;
+        i = n++;
+        while (i >= 0)
         {
-            cout << matrix[i][currentDiag - i] << " ";
+            arr[count] = matrix[i][j];
+            count++;
+            j++;
+            i--;
         }
-        cout << endl;
     }
-    cout << endl;
-
-    int maxElementsCount = currentDiag - 1;
-
-    for (; currentDiag < mSize * 2 - 1; currentDiag++)
+    n = 1;
+    while (n < size)
     {
-        for (int i = 0; i < maxElementsCount; i++){
-            cout << matrix[currentDiag - mSize + 1 + i][mSize - 1 - i] << " ";
-        }
-        cout << endl;
-        maxElementsCount--;
-    }
-}
-
-void printMatrixSpiral(vector<vector<int>> matrix){
-    cout << "Matrix spiral: " << endl;
-    int matrix_size = matrix.size();
-    for(int i = 0; i <= matrix_size/2; i++)
-    {   
-        if(i == 0)
+        i = size - 1;
+        j = n++;
+        while (j < size)
         {
-            cout << matrix[matrix_size/2][matrix_size/2] << " ";
-        }
- 
-        for(int k = 0; k < 2*i; k++) 
-        {
-            cout << matrix[matrix_size/2 - i][matrix_size/2 - i + 1 + k] << " ";
-        }
- 
-        for(int k = 0; k < 2*i; k++) 
-        {
-            cout << matrix[matrix_size/2 - i + 1 + k][matrix_size/2 + i] << " ";
-        }
- 
-        for(int k = 0; k < 2*i; k++) 
-        {
-            cout << matrix[matrix_size/2 + i][matrix_size/2 + i - 1 - k] << " ";
-        }
- 
-        for(int k = 0; k < 2*i; k++) 
-        {
-            cout << matrix[matrix_size/2 + i - 1 - k][matrix_size/2 - i] << " ";
+            arr[count] = matrix[i][j];
+            count++;
+            i--;
+            j++;
         }
     }
 }
 
-void printMatrixSpiralOrder(vector<vector<int>> matrix){
-    int rows = matrix.size();
-    int cols = matrix[0].size();
-    int top = 0, bottom = rows - 1, left = 0, right = cols - 1;
-    
-    while (top <= bottom && left <= right) {
-        for (int i = left; i <= right; i++) {
-            cout << matrix[top][i] << " ";
+void spiral(vector<vector<int>> matrix, vector<int> arr, int n)
+{
+    int shift, count, i, j;
+    shift = count = i = j = 0;
+
+    while (count < n * n)
+    {
+        arr[n * n - count - 1] = matrix[i][j];
+        if (i == shift && j < n - shift - 1)
+            j++;
+        else if (j == n - shift - 1 && i < n - shift - 1)
+            i++;
+        else if (i == n - shift - 1 && j > shift)
+            j--;
+        else
+            i--;
+
+        if ((i == shift + 1) && (j == shift) && (shift != n - shift - 1))
+        {
+            shift++;
         }
-        top++;
-        
-        for (int i = top; i <= bottom; i++) {
-            cout << matrix[i][right] << " ";
-        }
-        right--;
-        
-        if (top <= bottom) {
-            for (int i = right; i >= left; i--) {
-                cout << matrix[bottom][i] << " ";
-            }
-            bottom--;
-        }
-        
-        if (left <= right) {
-            for (int i = bottom; i >= top; i--) {
-                cout << matrix[i][left] << " ";
-            }
-            left++;
-        }
+
+        count++;
     }
+}
+
+void spiralReverse(vector<vector<int>> matrix, vector<int> arr, int n)
+{
+    int shift, count, i, j;
+    shift = count = i = j = 0;
+
+    while (count < n * n)
+    {
+        arr[count] = matrix[i][j];
+        if (i == shift && j < n - shift - 1)
+            j++;
+        else if (j == n - shift - 1 && i < n - shift - 1)
+            i++;
+        else if (i == n - shift - 1 && j > shift)
+            j--;
+        else
+            i--;
+
+        if ((i == shift + 1) && (j == shift) && (shift != n - shift - 1))
+        {
+            shift++;
+        }
+
+        count++;
+    }
+
+}
+
+void printMatrix(vector<vector<int>> vect) {
+    for (vector<int> row : vect){
+        for (int el : row){
+            cout << el << " ";
+        }
+        cout << '\n';
+    }
+    cout << '\n';
 }
 
 
@@ -139,16 +159,12 @@ int main()
 {
     srand(time(NULL));
     int size = 5;
-    int maxValue = 91;
+    int maxValue = 90;
     vector<vector<int>> matrix = genRandMatrix(size, maxValue);
+    vector<int> out;
 
     printMatrix(matrix);
-    cout << endl;
-    cout << "Matrix Diag: " << endl;
-    printMatrixDiag(matrix);
-    cout << endl;
 
-    printMatrixSpiral(matrix);
-    cout << endl;
-    printMatrixSpiralOrder(matrix);
+
+    
 }

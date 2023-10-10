@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <random>
 #include <vector>
 
 using namespace std;
@@ -7,79 +8,174 @@ using namespace std;
 class Shape {
     public:
         Shape() {}
-        Shape(int x, int y) {
-            this->coords[0][0] = x;
-            this->coords[0][1] = y;
-        }
+    
 
-    private:
+    void generateRandomPos() {
+        vector<int> result;
+
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<int> screen(0, 512);
+
+        int x = screen(gen);
+        int y = screen(gen);
+        result.push_back(x);
+        result.push_back(y);
+
+        coords.push_back(result);
+    }
+
+    void printCoords (){
+        for (int i = 0; i < coords.size(); i++){
+            cout << "X: " << coords[i][0] << endl;
+            cout << "Y: " << coords[i][1] << endl;
+        }
+    }
+
+    protected:
         vector<vector<int>> coords;
 
 };
 
-class Circle : Shape {
+class Circle : public Shape {
+    public:
+        Circle () {
+            generateRandomPos();
+            generateRadius();
+        };
+
+        void printInfo() {
+            printCoords();
+            cout << "Radius: " <<  radius << endl;
+        }
+
     private:
+        void generateRadius() {
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<int> radSize(5, 100);
+
+            radius = radSize(gen);
+        }
+
         int radius{0};
 };
 
 
-class Line : Shape {
+
+
+class Line : public Shape {
 
     public:
-        Line(int x1, int y1, int x2, int y2) {
-            this->coords[0][0] = x1;
-            this->coords[0][1] = y1;
-            this->coords[1][0] = x2;
-            this->coords[1][1] = y2;
-        };
+        Line() {
+            generateRandomPos();
+            generateRandomPos();
+            getLength();
+        }
 
         void getLength() {
             length = sqrt(pow(coords[0][1]-coords[0][0], 2) + pow(coords[1][1]-coords[1][0], 2));
         }
 
-        void print() {
-            cout << length << endl;
+        void printInfo() {
+            printCoords();
+            cout << "Line length: "<< length << endl;
         }
 
     private:
-        vector<vector<int>> coords;
         int length{0};
 };
 
-class Square : Line {
+class Rectangle : public Shape {
     public:
+        Rectangle() {
+            generateRandomPos();
+        }
 
         void inpKeyboard() {
-
+            
         }
 
         void inpRand() {
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<int> radSize(0, 100);
+
+            width = radSize(gen);
+            heigth = radSize(gen);
 
         }
 
-        void area() {
+        void areaCalc() {
+            area = width * heigth;
         }
 
-    private:
-        int m_x1{0};
-        int m_y1{0};
-        int m_x2{0};
-        int m_y2{0};
-        int m_x3{0};
-        int m_y3{0};
-        int m_x4{0};
-        int m_y4{0};
+        void perimeterCalc() {
+            perimeter = width*2 + heigth*2;
+        }
+
+        void printInfo(){
+            printCoords();
+            cout << "Width: " << width << endl;
+            cout << "Height: " << heigth << endl;
+            cout << "Perimeter: " << perimeter << endl;
+            cout << "Area: " << area << endl;
+        }
+
+
+
+    protected: 
+        int width{0};
+        int heigth{0};
+        int area;
+        int perimeter{0};
+
 };
 
-// class Rectangle : Square {
+class Square : public Rectangle{
+    public:
+        Square() {}
 
-// };
+        void inpRand() {
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<int> radSize(10, 100);
+
+            width = radSize(gen);
+            heigth = width;
+        }
+};
 
 
 
 
 int main() {
-    Line l(1,2,1,4);
-    l.getLength();
-    l.print();
+    cout << "Shape" << endl;
+    Shape test;
+    test.generateRandomPos();
+    test.printCoords();
+
+
+    cout << "Circle" << endl;
+    Circle circle;
+    circle.printInfo();
+
+    cout << "Line" << endl;
+    Line line;
+    line.printInfo();
+
+    cout << "Rectangle" << endl;
+    Rectangle rectangle;
+    rectangle.inpRand();
+    rectangle.areaCalc();
+    rectangle.perimeterCalc();
+    rectangle.printInfo();
+
+    cout << "Square" << endl;
+    Square square;
+    square.inpRand();
+    square.areaCalc();
+    square.perimeterCalc();
+    square.printInfo();
+
 }
