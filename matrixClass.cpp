@@ -39,6 +39,10 @@ public:
         }
     }
 
+    void sum()
+    {
+        srand(NUll
+
     void keyboardFill()
     {
         cout << "Введите " << m_x * m_y << " элементов в матрицу" << endl;
